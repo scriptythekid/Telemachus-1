@@ -10,3 +10,11 @@
 		* adapt telemachus camera code accordingly
 	* How can I more interactively debug this?
 
+* MAS docu:
+	* https://github.com/MOARdV/AvionicsSystems/wiki/Installation "Cameras in MAS behave a little differently than they did in RPM. Most importantly, you should name each camera or docking port camera. To do this: in the editor, right-click the part. There is a button to change its name. Click that, and type in a name. Each name should be unique, and you should probably give it a useful name, since that name can be displayed on MFDs."  
+	
+	* https://github.com/MOARdV/AvionicsSystems/wiki/MASCamera "The MASCamera is similar to the JSIExternalCameraSelector, but there are important differences to be aware of: ..." 
+	
+* MAS camera rendering could happen here: 
+	* https://github.com/MOARdV/AvionicsSystems/blob/605efd8a54075a00aff6db0867ecfa052419be3f/Source/MASPageCamera.cs
+	* 
