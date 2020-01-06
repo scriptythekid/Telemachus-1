@@ -1,0 +1,12 @@
+
+#### notes
+
+* purpose: trying to make telemachus support MASCamera from [1]
+* just editing "rpm-camera-support.cfg" and adding the partmodule "RasterPropMonitorCamera" to the stock-docking-port parts makes camera images available in telemachus, BUT rendered cameras seem off (rotated wrongly etc.)
+* if i replace all occurences of "JSIExternalCameraSelector" with "MASCamera" in RasterPropMonitorCamera.cs there are no more cameras found by telemachus and therefore no more images rendered/returned
+* todos
+	* Check what's different at runtime if rpmPartModule == JSIExternalCameraSelector vs MASCamera  (null vs MASCamera)
+	* Look into what changed from JSIExternalCameraSelector to MASCamera
+		* adapt telemachus camera code accordingly
+	* How can I more interactively debug this?
+

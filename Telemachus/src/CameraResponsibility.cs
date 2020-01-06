@@ -167,7 +167,7 @@ namespace Telemachus
             {
                 Match match = cameraNameEndpointRegex.Match(request.Url.AbsolutePath);
                 string cameraName = UnityEngine.WWW.UnEscapeURL(match.Groups[1].Value);
-                //PluginLogger.debug("GET CAMERA: " + cameraName);
+                PluginLogger.debug("GET CAMERA: " + cameraName);
                 return processCameraImageRequest(cameraName, request, response);
             }
             

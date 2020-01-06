@@ -16,10 +16,14 @@ namespace Telemachus.CameraSnapshots
                 {
                     foreach (PartModule module in part.Modules)
                     {
+                        // XXX gets called often (every update?)
+                        //PluginLogger.debug(String.Format("moduleName: {0}", module.moduleName));
                         if (module.moduleName == "JSIExternalCameraSelector")
+                        //if (module.moduleName == "MASCamera")
                         {
-                            //PluginLogger.debug("GOT MODULE");
+                            PluginLogger.debug("GOT MODULE");
                             rpmPartModule = module;
+                            //debugRPMFields(); //note2self: calling debugRPMFields() here seems to crash KSP on initial load of game(not save/scene) ...
                         }
                     }
                 }
@@ -175,6 +179,7 @@ namespace Telemachus.CameraSnapshots
             foreach (PartModule module in part.Modules)
             {
                 if (module.moduleName == "JSIExternalCameraSelector")
+                //if (module.moduleName == "MASCamera")
                 {
                     rpmModule = module;
                 }
