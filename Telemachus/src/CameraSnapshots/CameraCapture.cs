@@ -69,7 +69,8 @@ namespace Telemachus.CameraSnapshots
 
         protected virtual void LateUpdate()
         {
-            //PluginLogger.debug("LATE UPDATE FOR FLIGHT CAMERA");
+            PluginLogger.debug("LateUpdate() LATE UPDATE FOR FLIGHT CAMERA");
+            PluginLogger.debug("mutex: " + mutex);
             if (CameraManager.Instance != null && HighLogic.LoadedSceneIsFlight && !mutex)
             {
                 mutex = true;
@@ -77,6 +78,7 @@ namespace Telemachus.CameraSnapshots
                 repositionCamera();
                 StartCoroutine(newRender());
             }
+            
         }
 
         public IEnumerator newRender()
@@ -84,11 +86,13 @@ namespace Telemachus.CameraSnapshots
             //PluginLogger.debug(cameraManagerName() + ": WAITING FOR END OF FRAME");
             yield return new WaitForEndOfFrame();
             //PluginLogger.debug(cameraManagerName() + ": OUT OF FRAME");
-
+            PluginLogger.debug("newRender() post yield ...");
             foreach (Camera camera in cameraDuplicates.Values)
             {
                 //camera.targetTexture = rt;
+                debugCameraDetails(camera);
                 camera.Render();
+                debugCameraDetails(camera);
             }
 
                 //imageStopWatch.Start();

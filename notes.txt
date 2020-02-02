@@ -42,20 +42,6 @@ src/CameraSnapshots/RasterPropMonitorCamera.cs
 	* CameraCaptureManager is a Singleton,  unsure when/where it's getting instanced... sometime when the mod's DLLs are loaded!?
 	* 
 
-* test my understanding
-	* keep "JSIExternalCameraSelector" in RasterPropMonitorCamera.cs, testrun, collect Debug Log
-		http://127.0.0.1:8085/telemachus/cameras
-		"[{"name":"RPMCamera-","type":"RasterPropMonitor","url":"http://127.0.0.1:8085/telemachus/cameras/RPMCamera-"},{"name":"TelemachusFlightCamera","type":"FlightCamera","url":"http://127.0.0.1:8085/telemachus/cameras/TelemachusFlightCamera"}]""
-	* replace "JSIExternalCameraSelector" with "MASCamera", testrun, collect Debug Log
-		http://127.0.0.1:8085/telemachus/cameras
-			-> EMPTY!!
-			Logs:
-				[LOG 18:59:14.569] [Telemachus Debug] GOT MODULE
-[ERR 18:59:14.569] Module RasterPropMonitorCamera threw during OnStart: System.NullReferenceException: Object reference not set to an instance of an object
-  at Telemachus.CameraSnapshots.RasterPropMonitorCamera.get_cameraName () [0x00000] in <filename unknown>:0 
-  at Telemachus.CameraSnapshots.RasterPropMonitorCamera.DebugInfo () [0x00000] in <filename unknown>:0 
-  at Telemachus.CameraSnapshots.RasterPropMonitorCamera.OnStart (StartState state) [0x00000] in <filename unknown>:0 
-  at Part.ModulesOnStart () [0x00000] in <filename unknown>:0 
-
-	* compare Logs
-
+* image rendering
+	* (camera.) imageBytes    defined in src/CameraSnapshots/CameraCapture.cs
+		* rendering happens in "newRender()" -> "camera.Render();"
