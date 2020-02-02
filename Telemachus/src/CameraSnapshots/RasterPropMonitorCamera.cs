@@ -18,8 +18,8 @@ namespace Telemachus.CameraSnapshots
                     {
                         // XXX gets called often (every update?)
                         //PluginLogger.debug(String.Format("moduleName: {0}", module.moduleName));
-                        if (module.moduleName == "JSIExternalCameraSelector")
-                        //if (module.moduleName == "MASCamera")
+                        //if (module.moduleName == "JSIExternalCameraSelector")
+                        if (module.moduleName == "MASCamera")
                         {
                             PluginLogger.debug("GOT MODULE");
                             rpmPartModule = module;
@@ -41,7 +41,14 @@ namespace Telemachus.CameraSnapshots
                 {
                     if (rpmCameraModule != null)
                     {
-                        rpmCameraName = (String)getRPMField("cameraIDPrefix") + (int)getRPMField("current");
+                        //rpmCameraName = (String)getRPMField("cameraIDPrefix") + (int)getRPMField("current");
+                        //AvionicsSystems/MASCamera defines no field cameraIDPrefix
+                        // but it provides:
+                        /*
+                         cameraName 
+                         newCameraName 
+                         */
+                        rpmCameraName = (String)getRPMField("cameraName");
                     }
                 }
 
@@ -58,7 +65,8 @@ namespace Telemachus.CameraSnapshots
                 {
                     if (rpmCameraModule != null)
                     {
-                        rpmRotateCamera = (UnityEngine.Vector3)getRPMField("rotateCamera");
+                        //rpmRotateCamera = (UnityEngine.Vector3)getRPMField("rotateCamera");
+                        rpmRotateCamera = (UnityEngine.Vector3)getRPMField("rotation");
                     }
                 }
 
@@ -80,7 +88,8 @@ namespace Telemachus.CameraSnapshots
                 {
                     if (rpmCameraModule != null)
                     {
-                        rpmTranslateCamera = (UnityEngine.Vector3)getRPMField("translateCamera");
+                        //rpmTranslateCamera = (UnityEngine.Vector3)getRPMField("translateCamera");
+                        rpmTranslateCamera = (UnityEngine.Vector3)getRPMField("translation");
                     }
                 }
 
@@ -90,13 +99,16 @@ namespace Telemachus.CameraSnapshots
 
         public override void OnStart(PartModule.StartState state)
         {
+            PluginLogger.debug("OnStart()...");
             if (FlightGlobals.fetch != null)
             {
                 GameEvents.onVesselChange.Add(updateCameraManager);
                 if (vessel == FlightGlobals.ActiveVessel)
                 {
                     DebugInfo();
+                    PluginLogger.debug("post DebugInfo() ...");
                     addToManager();
+                    PluginLogger.debug("post addToManager() ...");
                 }
             }
         }
@@ -105,13 +117,15 @@ namespace Telemachus.CameraSnapshots
         {
             if(data == vessel)
             {
+                PluginLogger.debug("calling addToManager. this.cameraName: " + this.cameraName);
                 addToManager();
             }
             else
             {
                 if (CameraCaptureManager.classedInstance.isRemoveCameraFromManager(data, this.cameraName))
                 {
-                    //PluginLogger.debug("REMOVING CAMERA: " + RasterPropMonitorCameraCapture.buildCameraManagerName(this.cameraName));
+                    PluginLogger.debug("REMOVING CAMERA: " + RasterPropMonitorCameraCapture.buildCameraManagerName(this.cameraName));
+                    PluginLogger.debug("calling removeFromManager. this.cameraName: " + this.cameraName);
                     removeFromManager();
                 }
             }
@@ -119,6 +133,7 @@ namespace Telemachus.CameraSnapshots
 
         protected void addToManager()
         {
+            PluginLogger.debug("addToManager() called");
             CameraCaptureManager.Instance.BroadcastMessage("addCamera", this);
         }
 
@@ -178,8 +193,8 @@ namespace Telemachus.CameraSnapshots
 
             foreach (PartModule module in part.Modules)
             {
-                if (module.moduleName == "JSIExternalCameraSelector")
-                //if (module.moduleName == "MASCamera")
+                //if (module.moduleName == "JSIExternalCameraSelector")
+                if (module.moduleName == "MASCamera")
                 {
                     rpmModule = module;
                 }
@@ -200,6 +215,7 @@ namespace Telemachus.CameraSnapshots
 
         public void DebugInfo()
         {
+            PluginLogger.debug("DebugInfo()...");
             PluginLogger.debug("RPM CAMERA LOADED: " + part.name + " ; NAME: " + cameraName + " ; POS: " + part.transform.position + "; ROTATION: " + rotateCamera + " ; TRANSLATE: " + translateCamera);
         }
     }

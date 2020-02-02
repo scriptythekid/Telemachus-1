@@ -108,7 +108,7 @@ namespace Telemachus.CameraSnapshots
             {
                 return;
             }
-
+            
             GameObject container = new GameObject("RasterPropMonitorCameraCapture:" + camera.cameraName, typeof(RasterPropMonitorCameraCapture));
             RasterPropMonitorCameraCapture cameraCapture = (RasterPropMonitorCameraCapture)container.GetComponent(typeof(RasterPropMonitorCameraCapture));
             cameraCapture.rpmCamera = camera;
@@ -117,12 +117,14 @@ namespace Telemachus.CameraSnapshots
             cameras[name] = cameraCapture;
             cameraCapture.renderOffsetFactor = cameras.Count;
             addToVesselCameraMappings(camera.vessel, camera.cameraName);
+            PluginLogger.debug("addCamera " + "camera: " + camera + " camera.cameraName: " + camera.cameraName);
         }
 
         public void addCameraCapture(CameraCapture cameraCapture)
         {
             cameras[cameraCapture.cameraManagerName().ToLower()] = cameraCapture;
             cameraCapture.renderOffsetFactor = cameras.Count;
+            PluginLogger.debug("addCameraCapture " + " cameraCapture.cameraManagerName().ToLower(): " + cameraCapture.cameraManagerName().ToLower() );
         }
 
         public void removeCamera(string name)
