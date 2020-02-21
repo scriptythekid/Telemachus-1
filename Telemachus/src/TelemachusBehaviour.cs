@@ -174,10 +174,12 @@ namespace Telemachus
         public void Awake()
         {
             SimpleJson.SimpleJson.CurrentJsonSerializerStrategy = new SimpleJson.InfinityAsStringJsonSerializerStrategy();
-            
+
             LookForModsToInject();
             DontDestroyOnLoad(this);
-            startDataLink();
+            //hack: don't start webserver until we are in scene Flight, so game won't crash on load and some browser window already keeps requesting data
+            //startDataLink();
+            
         }
 
         public void OnDestroy()
@@ -187,23 +189,31 @@ namespace Telemachus
 
         public void Update()
         {
-            delayedAPIRunner.execute();
-
-            if (FlightGlobals.fetch != null)
+            if (HighLogic.LoadedSceneIsFlight)
             {
-                vesselChangeDetector.update(FlightGlobals.ActiveVessel);
+                //hack - see comment in Awake() 
+                if (webServer == null) {
+                    startDataLink();
+                }
 
-                foreach (var client in webServer.WebSocketServices["/datalink"].Sessions.Sessions.OfType<KSPWebSocketService>()) 
+                delayedAPIRunner.execute();
+
+                if (FlightGlobals.fetch != null)
                 {
-                    if (client.UpdateRequired(Time.time))
+                    vesselChangeDetector.update(FlightGlobals.ActiveVessel);
+
+                    foreach (var client in webServer.WebSocketServices["/datalink"].Sessions.Sessions.OfType<KSPWebSocketService>()) 
                     {
-                        client.SendDataUpdate();
+                        if (client.UpdateRequired(Time.time))
+                        {
+                            client.SendDataUpdate();
+                        }
                     }
                 }
-            }
-            else
-            {
-                PluginLogger.debug("Flight globals was null during start up; skipping update of vessel change.");
+                else
+                {
+                    PluginLogger.debug("Flight globals was null during start up; skipping update of vessel change.");
+                }
             }
         }
 
